@@ -9,7 +9,7 @@ import morgan from 'morgan';
 import clientRoutes from './routes/client.js';
 import generalRoutes from './routes/general.js';
 import managementRoutes from './routes/client.js';
-import clientRoutes from './routes/client.js';
+import salesRoutes from './routes/sales.js';
 
 
 // CONFIGURATION
@@ -28,3 +28,12 @@ app.use('/client', clientRoutes);
 app.use('/general', generalRoutes);
 app.use('/management', managementRoutes);
 app.use('/sales', salesRoutes);
+
+// MONGOOSE ROUTES
+const PORT = process.env.PORT || 9000;
+mongoose.connect(process.env.MONGODB_URL, {
+    useNewUrlParser: 'true',
+    useUnifiedTopology: 'true'
+}).then(() => {
+    app.listen(PORT, () => console.log(`Server port: ${PORT}`))
+}).catch((error) => console.log(`${error} did not connect`))
