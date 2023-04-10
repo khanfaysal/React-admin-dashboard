@@ -9,7 +9,8 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
-    Typography
+    Typography,
+    useTheme
 } from '@mui/material';
 import {
     SettingsOutlined,
@@ -96,7 +97,7 @@ const Sidebar = ({ drawerWidth, isNoneMobile, isSidebarOpen, setIsSidebarOpen })
     const { pathname } = useLocation();
     const [active, setActive] = useState('');
     const navigate = useNavigate();
-    // const theme = useTheme();
+    const theme = useTheme();
 
     useEffect(() => {
         setActive(pathname.substring(1));
@@ -137,18 +138,56 @@ const Sidebar = ({ drawerWidth, isNoneMobile, isSidebarOpen, setIsSidebarOpen })
                             {navItems.map(({ text, icon }) => {
                                 if (!icon) {
                                     return (
-                                        <Typography key={text} sx={{ m: '2.25rem 0 1rem 3rem' }}>
+                                        <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
                                             {text}
                                         </Typography>
-                                    )
+                                    );
                                 }
+                                const lcText = text.toLowerCase();
 
+                                return (
+                                    <ListItem key={text} disablePadding>
+                                        <ListItemButton
+                                            onClick={() => {
+                                                navigate(`/${lcText}`);
+                                                setActive(lcText);
+                                            }}
+                                            sx={{
+                                                backgroundColor:
+                                                    active === lcText
+                                                        ? theme.palette.secondary[300]
+                                                        : "transparent",
+                                                color:
+                                                    active === lcText
+                                                        ? theme.palette.primary[600]
+                                                        : theme.palette.secondary[100],
+                                            }}
+                                        >
+                                            <ListItemIcon
+                                                sx={{
+                                                    ml: "2rem",
+                                                    color:
+                                                        active === lcText
+                                                            ? theme.palette.primary[600]
+                                                            : theme.palette.secondary[200],
+                                                }}
+                                            >
+                                                {icon}
+                                            </ListItemIcon>
+                                            <ListItemText primary={text} />
+                                            {active === lcText && (
+                                                <ChevronRightOutlined sx={{ ml: "auto" }} />
+                                            )}
+                                        </ListItemButton>
+                                    </ListItem>
+                                );
                             })}
                         </List>
                     </Box>
                 </Drawer>
-            )}
-        </Box>
+            )
+            }
+        </Box >
     )
 }
 
